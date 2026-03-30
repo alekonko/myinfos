@@ -1,232 +1,526 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AK – Principal Cloud Architect</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alessandro Conconi — IT Architect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #0b3d91;
-      --secondary: #1f2937;
-      --accent: #2563eb;
-      --bg: #f5f7fa;
-      --text: #111827;
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2230;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --accent3:   #d29922;
+      --muted:     #8b949e;
+      --text:      #c9d1d9;
+      --heading:   #f0f6fc;
+      --tag-bg:    #1f3a5f;
+      --tag-text:  #79c0ff;
+      --cert-bg:   #1b2f1b;
+      --cert-text: #56d364;
     }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px 20px;
-      background: white;
+    /* ── NOISE LAYER ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
     }
 
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* ── HEADER ── */
     header {
-      border-bottom: 2px solid #e5e7eb;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+      animation: fadeUp .6s ease both;
     }
+
+    .prompt-line {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+
+    .prompt-line span { color: var(--muted); }
 
     h1 {
-      margin: 0;
-      font-size: 32px;
-      color: var(--primary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 600;
+      color: var(--heading);
+      line-height: 1.15;
+      letter-spacing: -.02em;
     }
 
-    h2 {
-      margin-top: 30px;
-      color: var(--secondary);
-      border-left: 4px solid var(--accent);
-      padding-left: 10px;
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
     }
 
-    p {
-      line-height: 1.6;
+    .tagline {
+      margin-top: 10px;
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: .02em;
     }
 
-    ul {
-      padding-left: 20px;
+    .location-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 4px;
+      white-space: nowrap;
     }
 
-    .meta {
-      margin-top: 8px;
-      color: #6b7280;
+    .dot {
+      width: 7px; height: 7px;
+      background: var(--accent2);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--accent2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+
+    /* ── LINKS BAR ── */
+    .links-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid #1f3a5f;
+      background: var(--tag-bg);
+      padding: 4px 12px;
+      border-radius: 20px;
+      transition: background .2s, border-color .2s;
+    }
+
+    .link-pill:hover {
+      background: #264e7a;
+      border-color: var(--accent);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-bottom: 52px;
+      animation: fadeUp .6s ease both;
+    }
+
+    section:nth-child(2)  { animation-delay: .1s; }
+    section:nth-child(3)  { animation-delay: .15s; }
+    section:nth-child(4)  { animation-delay: .2s; }
+    section:nth-child(5)  { animation-delay: .25s; }
+    section:nth-child(6)  { animation-delay: .3s; }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    h2 { font-size: 15px; font-weight: 400; }
+
+    /* ── SKILL GRID ── */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .skill-card-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: .1em;
+      margin-bottom: 8px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    .tag.green {
+      background: var(--cert-bg);
+      color: var(--cert-text);
+    }
+
+    .tag.yellow {
+      background: #2d2010;
+      color: var(--accent3);
+    }
+
+    /* ── CERTS ── */
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      transition: border-left-color .2s;
+    }
+
+    .cert-item:hover { border-left-color: var(--accent); }
+
+    .cert-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .cert-name {
+      font-weight: 600;
+      color: var(--heading);
       font-size: 14px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .card {
-      background: #f9fafb;
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer {
-      margin-top: 40px;
+    .cert-issuer {
       font-size: 12px;
-      color: #6b7280;
-      text-align: center;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
     }
 
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    /* ── ABOUT ── */
+    .about-text {
+      max-width: 680px;
+      color: var(--text);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .about-text strong {
+      color: var(--heading);
+      font-weight: 600;
+    }
+
+    /* ── INTERESTS ── */
+    .interest-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .interest-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ── ANIMATION ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header { grid-template-columns: 1fr; }
+      .location-badge { justify-self: start; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
+<div class="wrapper">
 
-    <header>
-      <h1>AK</h1>
-      <div class="meta">
-        Principal Cloud Architect · Kubernetes / OpenShift · GCP PCA
-      </div>
-      <div class="meta">
-        <a href="https://github.com/alekonko">github.com/alekonko</a>
-      </div>
-    </header>
+  <!-- HEADER -->
+  <header>
+    <div>
+      <p class="prompt-line">$ whoami <span>// IT Infrastructure Architect · Cloud & Containers</span></p>
+      <h1>Alessandro<br /><em>Conconi</em></h1>
+      <p class="tagline">Senior IT Architect — Cloud Infrastructure, Kubernetes & Platform Engineering</p>
+      <nav class="links-bar">
+        <a class="link-pill" href="https://github.com/alekonko" target="_blank" rel="noopener">
+          ⌥ github.com/alekonko
+        </a>
+        <a class="link-pill" href="https://www.linkedin.com/in/aleconco" target="_blank" rel="noopener">
+          ↗ LinkedIn
+        </a>
+      </nav>
+    </div>
+    <div class="location-badge">
+      <span class="dot"></span>
+      Turin, Italy
+    </div>
+  </header>
 
-    <section>
-      <h2>Profilo</h2>
-      <p>
-        IT Principal Cloud Architect con esperienza su infrastrutture cloud enterprise,
-        piattaforme container e modernizzazione applicativa.
-        Specializzato nella progettazione e gestione di ambienti Kubernetes e OpenShift
-        su cloud pubblici e infrastrutture ibride.
+  <!-- ABOUT -->
+  <section>
+    <p class="section-label">About</p>
+    <p class="about-text">
+      Senior IT Architect with broad hands-on expertise across <strong>cloud infrastructure</strong>,
+      <strong>container orchestration</strong> and enterprise platform engineering.
+      I design and operate large-scale systems on <strong>GCP</strong> and <strong>VMware</strong>,
+      with deep specialisation in <strong>Kubernetes</strong> and <strong>OpenShift</strong>.
+      Comfortable across the full stack — from low-level infrastructure to application deployment pipelines —
+      and currently expanding into <strong>Generative AI</strong> architectures and MLOps. Automate everything, and write clean code.
+    </p>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <p class="section-label">Core Skills</p>
+    <div class="skill-grid">
+
+      <div class="skill-card">
+        <p class="skill-card-title">Container & Orchestration</p>
+        <div class="tags">
+          <span class="tag ">Kubernetes</span>
+          <span class="tag yellow">OpenShift</span>
+          <span class="tag green">GKE</span>
+          <span class="tag">Docker/Podman</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Cloud Platforms</p>
+        <div class="tags">
+          <span class="tag ">GCP</span>
+          <span class="tag ">Azure</span>
+          <span class="tag green">VMware</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Infrastructure as Code / GitOps</p>
+        <div class="tags">
+          <span class="tag">ArgoCD</span>
+          <span class="tag">Helm</span>
+          <span class="tag">Kustomize</span>
+          <span class="tag">Terraform</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Programming & Scripting</p>
+        <div class="tags">
+          <span class="tag green">Python</span>
+          <span class="tag green">Go</span>
+          <span class="tag">PowerShell</span>
+          <span class="tag">Bash</span>
+          <span class="tag">Java</span>
+          <span class="tag">C / C++</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Middleware & Enterprise</p>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag yellow">JBoss / WildFly</span>          
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Operating Systems</p>
+        <div class="tags">
+          <span class="tag green">RHEL</span>
+          <span class="tag green">Fedora</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Windows Server</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <p class="skill-card-title">Emerging — GenAI</p>
+        <div class="tags">
+          <span class="tag yellow">LLM Integration</span>
+          <span class="tag yellow">RAG</span>
+          <span class="tag yellow">Langchain / Langraph</span>
+          <span class="tag yellow">ADK</span>
+          <span class="tag yellow">Chainlit</span>
+          <span class="tag yellow">A2A,MCP</span>
+          <span class="tag yellow">Vertex AI</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section>
+    <p class="section-label">Certifications</p>
+    <div class="cert-list">
+      <div class="cert-item">
+        <span class="cert-icon">☁️</span>
+        <div>
+          <p class="cert-name">Google Cloud Professional Cloud Architect</p>
+          <p class="cert-issuer">Google Cloud · GCP PCA</p>
+        </div>
+        <div class="tags" style="margin-left:auto;flex-shrink:0">
+          <span class="tag green">Active</span>
+        </div>
+      </div>
+      <div class="cert-item">
+        <span class="cert-icon">🐧</span>
+        <div>
+          <p class="cert-name">Red Hat OpenShift Administration</p>
+          <p class="cert-issuer">Red Hat · OpenShift Certified</p>
+        </div>
+        <div class="tags" style="margin-left:auto;flex-shrink:0">
+          <span class="tag green">Active</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GITHUB HIGHLIGHTS -->
+  <section>
+    <p class="section-label">Open Work &amp; Projects</p>
+    <div class="skill-card" style="max-width:600px">
+      <p class="skill-card-title">github.com/alekonko</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6">
+        Public repositories covering Kubernetes deployments, GCP infrastructure patterns,
+        scripting utilities and infrastructure-as-code examples.
       </p>
-      <p>
-        Competenze consolidate in automazione, Infrastructure as Code e integrazione
-        di sistemi complessi. Attualmente focalizzato sull'evoluzione di soluzioni
-        basate su GenAI e sull'integrazione di agenti intelligenti con sistemi IT
-        enterprise (cloud provider, observability, CMDB).
-      </p>
-    </section>
-
-    <section>
-      <h2>Competenze Tecniche</h2>
-      <div class="grid">
-        <div class="card">
-          <strong>Cloud & Virtualization</strong>
-          <ul>
-            <li>Google Cloud Platform (PCA)</li>
-            <li>VMware</li>
-            <li>Microsoft Azure</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <strong>Container Platforms</strong>
-          <ul>
-            <li>Kubernetes</li>
-            <li>Red Hat OpenShift</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <strong>Programming & IaC</strong>
-          <ul>
-            <li>Python, Go</li>
-            <li>PowerShell</li>
-            <li>Terraform</li>
-            <li>C / C++ (foundations)</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <strong>DevOps & Automation</strong>
-          <ul>
-            <li>CI/CD pipelines</li>
-            <li>GitHub Actions</li>
-            <li>System automation</li>
-          </ul>
-        </div>
+      <div class="tags" style="margin-top:12px">
+        <span class="tag">K8s</span>
+        <span class="tag">GCP</span>
+        <span class="tag">IaC</span>
+        <span class="tag">Python</span>
+        <span class="tag">Go</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2>Esperienza</h2>
+  <!-- INTERESTS -->
+  <section>
+    <p class="section-label">Beyond the Terminal</p>
+    <div class="interest-list">
+      <span class="interest-pill">🚵 Mountain Biking</span>
+      <span class="interest-pill">🚴 Long-Distance Cycling</span>
+      <span class="interest-pill">🌎 Bikepacking &amp; Bike Travel</span>
+      <span class="interest-pill">🏔️ Outdoor Adventures</span>
+    </div>
+  </section>
 
-      <div class="card">
-        <strong>Principal Cloud Architect</strong>
-        <p>
-          Progettazione e implementazione di piattaforme Kubernetes enterprise multi-cluster.
-          Definizione di architetture cloud ibride e strategie di modernizzazione.
-        </p>
-        <ul>
-          <li>Design di piattaforme OpenShift enterprise</li>
-          <li>Integrazione con sistemi di observability e CMDB</li>
-          <li>Automazione infrastrutturale con Terraform</li>
-        </ul>
-      </div>
+  <!-- FOOTER -->
+  <footer>
+    <span>Alessandro Conconi — IT Architect</span>
+    <span>Turin, Italy · github.com/alekonko</span>
+  </footer>
 
-      <div class="card">
-        <strong>Cloud / Infrastructure Consultant</strong>
-        <p>
-          Supporto a progetti di migrazione e trasformazione digitale verso cloud pubblici.
-        </p>
-        <ul>
-          <li>Migrazione workload on-prem → GCP</li>
-          <li>Ottimizzazione ambienti VMware</li>
-          <li>Standardizzazione pipeline DevOps</li>
-        </ul>
-      </div>
-
-    </section>
-
-    <section>
-      <h2>Certificazioni</h2>
-      <ul>
-        <li>Google Cloud Professional Cloud Architect</li>
-        <li>Red Hat OpenShift Certification</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Progetti Open Source</h2>
-      <ul>
-        <li>
-          <a href="https://github.com/alekonko/kubedecode">kubedecode</a> –
-          utility per decoding di Kubernetes secrets
-        </li>
-        <li>
-          <a href="https://github.com/alekonko/pysample-vscode">pysample-vscode</a> –
-          template sviluppo Python con VSCode
-        </li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Interessi</h2>
-      <p>
-        Attività outdoor, MTB ed escursioni di cicloviaggio.
-      </p>
-    </section>
-
-    <footer>
-      © 2026 AK · Hosted on GitHub Pages
-    </footer>
-
-  </div>
+</div>
 </body>
 </html>
